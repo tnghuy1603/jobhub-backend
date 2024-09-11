@@ -1,20 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CandidateService } from './candidate.service';
 import { CreateCandidateDto } from './dto/create-candidate.dto';
 import { UpdateCandidateDto } from './dto/update-candidate.dto';
 
-@Controller('candidate')
+@Controller('candidates')
 export class CandidateController {
   constructor(private readonly candidateService: CandidateService) {}
 
   @Post()
-  create(@Body() createCandidateDto: CreateCandidateDto) {
-    return this.candidateService.create(createCandidateDto);
+  async create(@Body() createCandidateDto: CreateCandidateDto) {
+    return await this.candidateService.register(createCandidateDto);
   }
 
   @Get()
-  findAll() {
-    return this.candidateService.findAll();
+  async findAll(@Query("page") page: number = 1,
+          @Query("limit") limit: number = 10) {
+    return await this.candidateService.findAll(page, limit);
   }
 
   @Get(':id')

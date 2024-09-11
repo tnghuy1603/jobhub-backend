@@ -1,0 +1,15 @@
+services:
+  jobhub_db:
+    image: mysql
+    container_name: jobhub_db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_PASSWORD=Letmein123
+      - MYSQL_DATABASE=jobhub
+      - MYSQL_USER=huytran
+    volumes:
+      - jobhub_mysql:/var/lib/mysql 
+volumes:
+  jobhub_mysql: 

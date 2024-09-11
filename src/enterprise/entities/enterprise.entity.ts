@@ -1,1 +1,35 @@
-export class Enterprise {}
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { EnterpriseStatus } from "./enterprise-status.constant";
+
+@Entity()
+export class Enterprise {
+    @PrimaryGeneratedColumn()
+    id: number
+    @Column()
+    username: string
+    @Column()
+    password: string
+    @Column()
+    name: string
+    @Column()
+    address: string
+    @Column()
+    representative: string
+    @Column({unique: true})
+    email: string
+    @Column({unique: true, nullable: false})
+    taxNumber: string
+    @Column({default: false})
+    potential: boolean
+    @Column({default: EnterpriseStatus.PENDING, enum: EnterpriseStatus, type: 'enum'})
+    status: string
+    @Column()
+    industry: string
+    @Column({nullable: true})
+    website: string
+    @Column()
+    description: string
+    @Column()
+    foundYear: number
+
+}
