@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { EnterpriseStatus } from "./enterprise-status.constant";
+import { Job } from "src/job/entities/job.entity";
 
 @Entity()
 export class Enterprise {
@@ -30,6 +31,8 @@ export class Enterprise {
     @Column()
     description: string
     @Column()
-    foundYear: number
+    foundYear: number;
+    @OneToMany(() => Job, job => job.enterprise)
+    jobs: Job[];
 
 }

@@ -9,7 +9,7 @@ import { JobModule } from './job/job.module';
 import { ApplicationModule } from './application/application.module';
 import { IncentiveStrategyModule } from './incentive-strategy/incentive-strategy.module';
 import { ContractModule } from './contract/contract.module';
-import { JobDetailsModule } from './job-details/job-details.module';
+
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configDotenv } from 'dotenv';
 import { ConfigModule } from '@nestjs/config';
@@ -17,6 +17,11 @@ import { Enterprise } from './enterprise/entities/enterprise.entity';
 import { Candidate } from './candidate/entities/candidate.entity';
 import { EmployeeModule } from './employee/employee.module';
 import { JwtModule } from '@nestjs/jwt';
+import { Job } from './job/entities/job.entity';
+import { Employee } from './employee/entities/employee.entity';
+import { Application } from './application/entities/application.entity';
+import { Contract } from './contract/entities/contract.entity';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [ 
@@ -38,7 +43,7 @@ import { JwtModule } from '@nestjs/jwt';
       database: process.env.DB_DB,
       logging: true,
       synchronize: true,
-      entities: [Enterprise, Candidate]
+      entities: [Enterprise, Candidate, Job, Employee, Application, Contract]
 
     }),
     EnterpriseModule,
@@ -48,9 +53,9 @@ import { JwtModule } from '@nestjs/jwt';
     ApplicationModule,
     IncentiveStrategyModule,
     ContractModule,
-    JobDetailsModule,
     AuthModule,
     EmployeeModule,
+    SearchModule,
     ],
   controllers: [AppController],
   providers: [AppService],
