@@ -1,20 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, DefaultValuePipe, ParseIntPipe } from '@nestjs/common';
 import { JobService } from './job.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 
-@Controller('job')
+@Controller('/api/v1/jobs')
 export class JobController {
   constructor(private readonly jobService: JobService) {}
 
   @Post()
   create(@Body() createJobDto: CreateJobDto) {
-    return this.jobService.create(createJobDto);
+    return this.jobService.createNewJob(createJobDto);
   }
 
   @Get()
-  findAll() {
-    return this.jobService.findAll();
+  findAll(@Query() status: string,
+          @Query("page", new DefaultValuePipe(10), ParseIntPipe) page: number,
+          @Query("limit", new DefaultValuePipe(3), ParseIntPipe) limit: number) {
+    return this.jobService.findAll(status, page, limit);
   }
 
   @Get(':id')
@@ -27,8 +29,5 @@ export class JobController {
     return this.jobService.update(+id, updateJobDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.jobService.remove(+id);
-  }
+  
 }

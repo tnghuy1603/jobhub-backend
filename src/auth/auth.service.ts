@@ -4,7 +4,7 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Candidate } from 'src/candidate/entities/candidate.entity';
 import { Repository } from 'typeorm';
-import { Enterprise } from 'src/enterprise/entities/enterprise.entity';
+import { Enterprise } from 'src/company/entities/enterprise.entity';
 import { Employee } from 'src/employee/entities/employee.entity';
 import * as brcypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';

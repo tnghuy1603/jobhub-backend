@@ -1,4 +1,4 @@
-import { Enterprise } from "src/enterprise/entities/enterprise.entity";
+import { Company } from "src/company/entities/company.entity";
 import { Column, Entity, PrimaryGeneratedColumn, Check, ManyToOne } from "typeorm";
 
 @Entity()
@@ -11,11 +11,8 @@ export class Job {
     @Column()
     jobDescription: string;
 
-    @Column()
+    @Column({})
     postedDate: Date
-
-    @Column()
-    
 
     @Column({ type: 'varchar', length: 50 })
     @Check(`employment_type IN('Contract', 'Full time', 'Part time', 'Internship', 'Temporary', 'Freelance')`)
@@ -24,7 +21,7 @@ export class Job {
     @Column({ type: 'varchar', length: 100 })
     salaryRange: string;
 
-    @Column({ type: 'varchar', length: 20 })
+    @Column({ type: 'varchar', length: 20, default: 'Pending' })
     @Check(`status IN('Pending', 'Accepted', 'Rejected')`)
     status: string;
 
@@ -34,6 +31,6 @@ export class Job {
 
     @Column({type: 'int', default: 1})
     version: number;
-    @ManyToOne(() => Enterprise, enterprise => enterprise.jobs)
-    enterprise: Enterprise;
+    @ManyToOne(() => Company, company => company.jobs)
+    company: Company
 }

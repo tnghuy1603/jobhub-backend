@@ -1,9 +1,11 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { EnterpriseStatus } from "./enterprise-status.constant";
 import { Job } from "src/job/entities/job.entity";
-
+export enum CompanyStatus {
+    PENDING = 'pending',
+    ACTIVATED = 'activated'
+}
 @Entity()
-export class Enterprise {
+export class Company {
     @PrimaryGeneratedColumn()
     id: number
     @Column()
@@ -22,7 +24,7 @@ export class Enterprise {
     taxNumber: string
     @Column({default: false})
     potential: boolean
-    @Column({default: EnterpriseStatus.PENDING, enum: EnterpriseStatus, type: 'enum'})
+    @Column({default: CompanyStatus.PENDING, enum: CompanyStatus, type: 'enum'})
     status: string
     @Column()
     industry: string
@@ -32,7 +34,7 @@ export class Enterprise {
     description: string
     @Column()
     foundYear: number;
-    @OneToMany(() => Job, job => job.enterprise)
+    @OneToMany(() => Job, job => job.company)
     jobs: Job[];
 
 }
