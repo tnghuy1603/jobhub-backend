@@ -5,7 +5,6 @@ import { QueryFailedError, Repository, TypeORMError } from 'typeorm';
 import { Company } from './entities/company.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PasswordHelper } from 'src/helper/password.helper';
-import { ChangeStatusDto } from './dto/change-status.dto';
 import { PaginationHelper } from 'src/helper/pagination.helper';
 
 
@@ -26,12 +25,9 @@ export class CompanyService {
       name: createCompanyDto.companyName,
       password: hashedPwd
     }
-    return this.companyRepository.save(company);
-  }
-  async changeStatus(id: number, changeStatusDto: ChangeStatusDto){
-    const existingEnterprise = await this.companyRepository.findOne({where: {id}});
-    existingEnterprise.status = changeStatusDto.status;
-    return this.companyRepository.save(existingEnterprise);
+    const savedCompany = await this.companyRepository.save(company);
+    delete savedCompany.password;
+    return savedCompany;
   }
 
   async findAll(status: string, page: number, limit: number) {
@@ -43,20 +39,23 @@ export class CompanyService {
   }
 
   async findOne(id: number) {
-    const existingEnterprise =  await this.companyRepository.findOne({where: {id}});
-    if(!existingEnterprise){
+    const existingCompany =  await this.companyRepository.findOne({where: {id}});
+    if(!existingCompany){
       throw new NotFoundException("Enterprise not found");
     }
-    return existingEnterprise;
+    return existingCompany;
   }
 
   async update(id: number, updateCompanyDto: UpdateCompanyDto) {
-    let existingEnterprise = await this.companyRepository.findOne({where: {id}});
-    if(!existingEnterprise){
+    let existingCompany = await this.companyRepository.findOne({where: {id}});
+    if(!existingCompany){
       throw new NotFoundException('Enterprise not found');
     }
-    const enterpriseToUpdate = {...existingEnterprise, ...updateCompanyDto}
-    return this.companyRepository.save(enterpriseToUpdate);
+    const company = {...existingCompany, ...updateCompanyDto}
+    
+    const savedCompany = await this.companyRepository.save(company);
+    delete savedCompany.password;
+    return savedCompany;
   }
 
 }

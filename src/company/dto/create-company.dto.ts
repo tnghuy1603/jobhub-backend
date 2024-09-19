@@ -2,37 +2,27 @@ import { IsEmail, IsInt, isNotEmpty, IsNotEmpty, IsOptional, IsPositive, IsStrin
 
 export class CreateCompanyDto {
     @IsNotEmpty()
-    username: string
-
-    @IsNotEmpty()
     @MinLength(6, {message: "Password must be longer than 6 characters"})
-    password: string
-
+    password: string;
     @IsNotEmpty()
     @IsString()
-    companyName: string
-
+    companyName: string;
     @IsNotEmpty()
-    taxNumber: string
+    taxNumber: string;
     @IsNotEmpty()
-    representative: string
+    representative: string;
     @IsNotEmpty()
-    address: string
-
+    address: string;
     @IsNotEmpty()
     @IsEmail()
-    email: string
-
+    email: string;
     @IsNotEmpty()
-    industry: string
-    
+    industry: string;
     @IsOptional()
-    website?: string
-
+    website?: string;
     @IsPositive()
     @IsInt()
-    foundYear: number
-
+    foundYear: number;
     @IsNotEmpty()
-    description: string
+    description: string;
 }

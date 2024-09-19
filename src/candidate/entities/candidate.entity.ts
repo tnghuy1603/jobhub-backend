@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Application } from "src/application/entities/application.entity";
+import { Interview } from "src/interview/entities/interview.entity";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Candidate {
@@ -25,7 +27,7 @@ export class Candidate {
     @Column({name: 'profile_picture', nullable: true})
     profilePicture: string
 
-    @Column({nullable: false})
+    @Column({nullable: false, name: 'contact_number'})
     contactNumber: string
 
     @Column({nullable: true})
@@ -33,5 +35,9 @@ export class Candidate {
 
     @Column({nullable: false})
     address: string
+    @OneToMany(() => Interview, interview => interview.candidate)
+    interviews: Interview[]
+    @OneToMany(() => Application, application => application.candidate)
+    applications: Application[];
     
 }

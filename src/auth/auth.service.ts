@@ -4,30 +4,32 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Candidate } from 'src/candidate/entities/candidate.entity';
 import { Repository } from 'typeorm';
-import { Enterprise } from 'src/company/entities/enterprise.entity';
-import { Employee } from 'src/employee/entities/employee.entity';
+
+
 import * as brcypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
+import { Company } from 'src/company/entities/company.entity';
+import { Recruiter } from 'src/recruiter/entities/recruiter.entity';
 
 @Injectable()
 export class AuthService {
   constructor(@InjectRepository(Candidate) private readonly candidateRepository: Repository<Candidate>,
-              @InjectRepository(Enterprise)private readonly enterpriseRepository: Repository<Enterprise>,
-              @InjectRepository(Employee)private readonly employeeRepository: Repository<Employee>,
+              @InjectRepository(Company)private readonly companyRepository: Repository<Company>,
+              @InjectRepository(Recruiter)private readonly recruiterRepository: Repository<Recruiter>,
               private jwtService: JwtService
             ){}
   async login(type: string, loginDto: LoginDto) {
     let existingUser;
     switch(type){
-      case 'employee': 
-        existingUser = await this.employeeRepository.findOne({where: {email: loginDto.email}});
+      case 'recruiter': 
+        existingUser = await this.recruiterRepository.findOne({where: {email: loginDto.email}});
         break;
       case 'candidate': 
         existingUser = await this.candidateRepository.findOne({where: {email: loginDto.email}})
         break;
-      case 'enterprise': 
-        existingUser = await this.enterpriseRepository.findOne({where: {email: loginDto.email}})
+      case 'company': 
+        existingUser = await this.companyRepository.findOne({where: {email: loginDto.email}})
         break;
       default: 
         throw new BadRequestException("Invalid login type");
@@ -42,7 +44,6 @@ export class AuthService {
     
     const payload = {
       sub: existingUser.email,
-      iat: Date.now(),
       role: type
     };
     const accessToken = this.jwtService.sign(payload) 

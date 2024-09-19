@@ -20,5 +20,5 @@ export class CreateJobDto {
     postFee: number;
 
     @IsNumber()
-    companyId: number;
+    companyLocationId: number;
 }

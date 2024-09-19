@@ -8,17 +8,18 @@ import { PaginationHelper } from 'src/helper/pagination.helper';
 
 import { SearchService } from 'src/search/search.service';
 import { Company } from 'src/company/entities/company.entity';
+import { CompanyLocation } from 'src/company-location/entities/company-location.entity';
 
 @Injectable()
 export class JobService {
   constructor(@InjectRepository(Job) private readonly jobRepository: Repository<Job>,
-              @InjectRepository(Company) private readonly enterpriseRepository: Repository<Company>,
+              @InjectRepository(CompanyLocation) private readonly companyLocationRepository: Repository<CompanyLocation>,
               private readonly searchService: SearchService){}
               
   async createNewJob(createJobDto: CreateJobDto) {
-    const enterprise = await this.enterpriseRepository.findOne({where: {id: createJobDto.companyId}});
-    if(!enterprise){
-      throw new BadRequestException("No enterpirse with id = " + createJobDto.companyId)
+    const companyLocation = await this.companyLocationRepository.findOne({where: {id: createJobDto.companyLocationId}});
+    if(!companyLocation){
+      throw new BadRequestException("No company location with id = " + createJobDto.companyLocationId)
     }
 
     
@@ -29,7 +30,7 @@ export class JobService {
       employmentType: createJobDto.employmentType,
       salaryRange: createJobDto.salaryRange,
       postFee: createJobDto.postFee,
-      enterprise: enterprise, 
+      companyLocation 
     }
     const savedJob = await this.jobRepository.save(job)
     const doc =  {
@@ -41,7 +42,7 @@ export class JobService {
         salaryRange: savedJob.salaryRange,
         status: savedJob.status,
         postFee: savedJob.postFee,
-        enterprise: savedJob.company.id,
+        enterprise: savedJob.workplace.id
       }
     
     this.searchService.indexDocument(savedJob.id.toString(), 'jobs', doc)

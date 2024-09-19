@@ -12,12 +12,17 @@ import { configDotenv } from 'dotenv';
 import { ConfigModule } from '@nestjs/config';
 import { Company } from './company/entities/company.entity';
 import { Candidate } from './candidate/entities/candidate.entity';
-import { EmployeeModule } from './employee/employee.module';
+import { EmployeeModule } from './recruiter/recruiter.module';
 import { JwtModule } from '@nestjs/jwt';
 import { Job } from './job/entities/job.entity';
-import { Employee } from './employee/entities/employee.entity';
+import { Recruiter } from './recruiter/entities/recruiter.entity';
 import { Application } from './application/entities/application.entity';
 import { SearchModule } from './search/search.module';
+import { CompanyLocationModule } from './company-location/company-location.module';
+import { InterviewModule } from './interview/interview.module';
+import { CompanyLocation } from './company-location/entities/company-location.entity';
+import { Payment } from './payment/entities/payment.entity';
+import { Interview } from './interview/entities/interview.entity';
 
 @Module({
   imports: [ 
@@ -39,7 +44,7 @@ import { SearchModule } from './search/search.module';
       database: process.env.DB_DB,
       logging: true,
       synchronize: true,
-      entities: [Company, Candidate, Job, Employee, Application]
+      entities: [Company, Candidate, Job, Recruiter, Application, CompanyLocation, Payment, Interview]
 
     }),
     EnterpriseModule,
@@ -50,6 +55,8 @@ import { SearchModule } from './search/search.module';
     AuthModule,
     EmployeeModule,
     SearchModule,
+    CompanyLocationModule,
+    InterviewModule,
 
     ],
   controllers: [AppController],
