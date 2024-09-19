@@ -21,8 +21,6 @@ export class JobService {
     if(!companyLocation){
       throw new BadRequestException("No company location with id = " + createJobDto.companyLocationId)
     }
-
-    
     const job = {
       jobTitle: createJobDto.jobTitle,
       jobDescription: createJobDto.jobDescription,
@@ -30,9 +28,12 @@ export class JobService {
       employmentType: createJobDto.employmentType,
       salaryRange: createJobDto.salaryRange,
       postFee: createJobDto.postFee,
-      companyLocation 
+      workplace: companyLocation 
     }
     const savedJob = await this.jobRepository.save(job)
+    console.log(savedJob);
+    console.log("workplace " + savedJob.workplace);
+    
     const doc =  {
         id: savedJob.id,
         jobTitle: savedJob.jobTitle,
@@ -42,7 +43,7 @@ export class JobService {
         salaryRange: savedJob.salaryRange,
         status: savedJob.status,
         postFee: savedJob.postFee,
-        enterprise: savedJob.workplace.id
+        company: savedJob.workplace.id
       }
     
     this.searchService.indexDocument(savedJob.id.toString(), 'jobs', doc)
@@ -51,9 +52,9 @@ export class JobService {
 
   async findAll(status: string, page: number, limit: number) {
     if(status){
-      return PaginationHelper.paginate(this.jobRepository, {status}, page, limit);
+      return PaginationHelper.paginate(this.jobRepository, {status}, page, limit, null, null);
     }
-    return PaginationHelper.paginate(this.jobRepository, {}, page, limit);
+    return PaginationHelper.paginate(this.jobRepository, {}, page, limit, null, null);
   }
 
   async findOne(id: number): Promise<Job> {
@@ -63,9 +64,15 @@ export class JobService {
     }
     return existingJob;
   }
-
-  update(id: number, updateJobDto: UpdateJobDto) {
-    return `This action updates a #${id} job`;
+  async update(id: number, updateJobDto: UpdateJobDto) {
+    // Store new record
+    const existingJob = await this.jobRepository.findOne({where: {id}});
+    if(!existingJob){
+      throw new NotFoundException('Job not found');
+    }
+    const {id: jobId, ...jobInfor} = existingJob;
+    const jobToSave = {...jobInfor, ...updateJobDto, version: jobInfor.version+ 1, status: 'pending'};
+    return await this.jobRepository.save(jobToSave);
   }
   async searchJob(query: string, location: string){
     return await this.searchService.searchMutilFields('jobs', ['jobTitle', 'jobDescription'], query, {})

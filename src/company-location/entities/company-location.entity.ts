@@ -20,5 +20,7 @@ export class CompanyLocation {
     jobs: Job[]
     @OneToMany(() => Interview, interview => interview.companyLocation, {cascade: true})
     interviews: Interview[]
+    @Column({name: 'is_deleted', default: false})
+    isDeleted: boolean
     
 }

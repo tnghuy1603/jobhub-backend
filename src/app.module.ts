@@ -33,7 +33,7 @@ import { Interview } from './interview/entities/interview.entity';
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       global: true,
-      signOptions: {algorithm: 'HS256', expiresIn: '10min'}
+      signOptions: {algorithm: 'HS256', expiresIn: '10h'}
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',

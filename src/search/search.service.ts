@@ -24,12 +24,11 @@ export class SearchService implements OnModuleInit{
               employmentType: {type: 'keyword'},
               status: {type: 'keyword'},
               postFee: {type: 'float'},
-              enterprise: {type: 'integer'}
+              company: {type: 'integer'}
   
             }
           },
         }
-       
       });
     }
     console.log('Elastic search job idex created')

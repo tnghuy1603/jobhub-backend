@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query, DefaultValuePipe } from '@nestjs/common';
 import { RecruiterService } from './recruiter.service';
-import { CreateRecruiterDto } from './dto/create-employee.dto';
-import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import { CreateRecruiterDto } from './dto/create-recruiter.dto';
+import { UpdateRecruiterDto } from './dto/update-recruiter.dto';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { Roles, ROLES_KEY } from 'src/helper/decorator/role.decorator';
 import { RoleGuard } from 'src/helper/guards/role.guard';
 import { UserRole } from 'src/helper/enum/role.enum';
 
-@Controller('recruiters')
+@Controller('api/v1/recruiters')
 @UseGuards(JwtAuthGuard)
 export class RecruiterController {
   constructor(private readonly recruiterService: RecruiterService) {}
@@ -32,12 +32,7 @@ export class RecruiterController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEmployeeDto: UpdateEmployeeDto) {
-    return this.recruiterService.update(+id, updateEmployeeDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.recruiterService.remove(+id);
+  update(@Param('id') id: string, @Body() updateRecruiterDto: UpdateRecruiterDto) {
+    return this.recruiterService.update(+id, updateRecruiterDto);
   }
 }

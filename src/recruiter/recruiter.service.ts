@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateRecruiterDto } from './dto/create-employee.dto';
-import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import { CreateRecruiterDto } from './dto/create-recruiter.dto';
+import { UpdateRecruiterDto } from './dto/update-recruiter.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Recruiter } from './entities/recruiter.entity';
 import {Repository } from 'typeorm';
@@ -27,22 +27,33 @@ export class RecruiterService {
     return this.recruiterRepository.save(recruiter);
   }
 
-  findAll(companyId: number, page: number, limit: number) {
+  async findAll(companyId: number, page: number, limit: number) {
     if(companyId){
-      return PaginationHelper.paginate(this.recruiterRepository, {companyId}, page, limit)
+      return await PaginationHelper.paginate(this.recruiterRepository, {company: {id: companyId}}, page, limit, null, null);
     }
-    return PaginationHelper.paginate(this.recruiterRepository, {}, page, limit)
+    
+    return await PaginationHelper.paginate(this.recruiterRepository, {}, page, limit, null, null);
+  }
+  
+
+  async findOne(id: number) {
+    const existingRecruiter = await this.recruiterRepository.findOne({where: {id}});
+    if(!existingRecruiter){
+      throw new NotFoundException("Recruiter not found")
+    }
+    return existingRecruiter;
   }
 
-  findOne(id: number) {
-    return ''
+  async update(id: number, updateRecruiterDto: UpdateRecruiterDto) {
+    const existingRecruiter = this.recruiterRepository.findOne({where: {id}});
+    if(!existingRecruiter){
+      throw new NotFoundException("Recruiter not found")
+    }
+    const recruiter = {...existingRecruiter, ...updateRecruiterDto};
+    const updatedRecruiter = await this.recruiterRepository.save(recruiter);
+    delete updatedRecruiter.password;
+    return updatedRecruiter;
   }
 
-  update(id: number, updateEmployeeDto: UpdateEmployeeDto) {
-    return `This action updates a #${id} employee`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} employee`;
-  }
+  
 }

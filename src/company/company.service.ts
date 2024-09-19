@@ -25,16 +25,14 @@ export class CompanyService {
       name: createCompanyDto.companyName,
       password: hashedPwd
     }
-    const savedCompany = await this.companyRepository.save(company);
-    delete savedCompany.password;
-    return savedCompany;
+    return await this.companyRepository.save(company);
   }
 
   async findAll(status: string, page: number, limit: number) {
     if(status){
-      return await PaginationHelper.paginate(this.companyRepository, {status}, page, limit );
+      return await PaginationHelper.paginate(this.companyRepository, {status}, page, limit, null, null );
     }
-    return await PaginationHelper.paginate(this.companyRepository, {}, page, limit);
+    return await PaginationHelper.paginate(this.companyRepository, {}, page, limit, null , null);
     
   }
 
@@ -53,9 +51,7 @@ export class CompanyService {
     }
     const company = {...existingCompany, ...updateCompanyDto}
     
-    const savedCompany = await this.companyRepository.save(company);
-    delete savedCompany.password;
-    return savedCompany;
+    return await this.companyRepository.save(company);
   }
 
 }

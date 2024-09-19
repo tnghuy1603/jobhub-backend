@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { CompanyLocation } from "src/company-location/entities/company-location.entity";
 import { Company } from "src/company/entities/company.entity";
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, JoinColumn, } from "typeorm";
@@ -15,6 +16,7 @@ export class Recruiter {
     @Column({ nullable: true })
     position: string;
     @Column({nullable: false})
+    @Exclude()
     password: string;
 
     @ManyToOne(() => Company, company => company.recruiters, { onDelete: 'CASCADE' })

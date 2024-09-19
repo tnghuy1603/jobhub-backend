@@ -1,4 +1,5 @@
-import { IsDateString, IsNotEmpty, IsNumber, IsPositive, IsString, IsIn } from "class-validator";
+import { IsDateString, IsNotEmpty, IsNumber, IsPositive, IsString, IsIn, IsEnum } from "class-validator";
+import { Seniority } from "../entities/job.entity";
 
 export class CreateJobDto {
     @IsNotEmpty()
@@ -18,6 +19,9 @@ export class CreateJobDto {
 
     @IsPositive()
     postFee: number;
+
+    @IsEnum(Seniority)
+    seniority: Seniority;
 
     @IsNumber()
     companyLocationId: number;

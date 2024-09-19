@@ -18,5 +18,4 @@ export class Application {
     @ManyToOne(() => Candidate, candidate => candidate.applications)
     @JoinColumn({name: 'candidate_id'})
     candidate: Candidate;
-    
 }

@@ -1,7 +1,15 @@
 import { CompanyLocation } from "src/company-location/entities/company-location.entity";
 import { Company } from "src/company/entities/company.entity";
+import { Recruiter } from "src/recruiter/entities/recruiter.entity";
 import { Column, Entity, PrimaryGeneratedColumn, Check, ManyToOne, JoinColumn } from "typeorm";
-
+export enum Seniority{
+    INTERNSHIP = 'Internship',
+    FRESHER = 'Fresher',
+    ASSOCIATE = 'Associate',
+    MIDSENIOR = 'Mid Senior',
+    DIRECTOR = 'Director',
+    EXECUTIVE = 'Executive'
+}
 @Entity()
 export class Job {
     @PrimaryGeneratedColumn()
@@ -16,8 +24,12 @@ export class Job {
     postedDate: Date
 
     @Column({ type: 'varchar', length: 50, name: 'employement_type' })
-    @Check(`employment_type IN('Contract', 'Full time', 'Part time', 'Internship', 'Temporary', 'Freelance')`)
+    @Check(`employment_type IN('Contract', 'Full time', 'Part time', 'Temporary', 'Freelance')`)
     employmentType: string;
+    
+    @Column({type: 'enum', enum: Seniority})
+    seniority: string;
+    
 
     @Column({ type: 'varchar', length: 100, name: 'salary_range' })
     salaryRange: string;
@@ -29,11 +41,13 @@ export class Job {
     @Column({ type: 'decimal', name: 'post_fee' })
     @Check('fee_amount > 0')
     postFee: number;
+    
 
     @Column({type: 'int', default: 1})
     version: number;
     @ManyToOne(() => CompanyLocation, company => company.jobs)
     @JoinColumn({name: 'workplace'})
     workplace: CompanyLocation
+    
     
 }

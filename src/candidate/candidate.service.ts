@@ -18,7 +18,7 @@ export class CandidateService {
   }
 
   async findAll(page: number, limit: number) {
-    return await PaginationHelper.paginate(this.candidateRepository, {}, page, limit);
+    return await PaginationHelper.paginate(this.candidateRepository, {}, page, limit, null, null);
   }
 
   async findOne(id: number) {
