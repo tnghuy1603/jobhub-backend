@@ -23,6 +23,12 @@ import { InterviewModule } from './interview/interview.module';
 import { CompanyLocation } from './company-location/entities/company-location.entity';
 import { Payment } from './payment/entities/payment.entity';
 import { Interview } from './interview/entities/interview.entity';
+import { ResumeModule } from './resume/resume.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { Resume } from './resume/entities/resume.entity';
+import { cloudStorage } from './cloudinary/multer-cloundinary';
+
 
 @Module({
   imports: [ 
@@ -44,7 +50,7 @@ import { Interview } from './interview/entities/interview.entity';
       database: process.env.DB_DB,
       logging: true,
       synchronize: true,
-      entities: [Company, Candidate, Job, Recruiter, Application, CompanyLocation, Payment, Interview]
+      entities: [Company, Candidate, Job, Recruiter, Application, CompanyLocation, Payment, Interview, Resume]
 
     }),
     EnterpriseModule,
@@ -57,7 +63,8 @@ import { Interview } from './interview/entities/interview.entity';
     SearchModule,
     CompanyLocationModule,
     InterviewModule,
-
+    ResumeModule,
+    
     ],
   controllers: [AppController],
   providers: [AppService],

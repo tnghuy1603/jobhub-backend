@@ -8,7 +8,7 @@ import { UserRole } from 'src/helper/enum/role.enum';
 import { RoleGuard } from 'src/helper/guards/role.guard';
 import { Request } from 'express';
 
-@Controller('companies')
+@Controller('api/v1/companies')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
